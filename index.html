@@ -1,0 +1,988 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Peds Final</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+
+    <style>
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu",
+          "Droid Sans", sans-serif, "Meiryo";
+        padding: 0 12px;
+      }
+
+      table {
+        border-collapse: collapse;
+        margin-bottom: 24px;
+        width: 100%;
+      }
+      table > thead > tr > th,
+      table > tbody > tr > td {
+        padding: 5px 10px;
+      }
+      table > thead > tr > th {
+        text-align: left;
+        border-bottom: 1px solid;
+      }
+      table > tbody > tr + tr > td {
+        border-top: 1px solid;
+      }
+
+      .tooltip {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+      }
+      .tooltip img {
+        display: none;
+        position: absolute;
+        width: var(--tooltip-img-width, 300px);
+        height: auto;
+        border: 2px solid #f00;
+        background: #ffffcc;
+        padding: 5px;
+        z-index: 10;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(10px);
+        max-width: 90vw; /* ✅ prevents image from exceeding viewport width */
+        max-height: 80vh; /* ✅ keeps image inside visible page vertically */
+        object-fit: contain;
+        box-sizing: border-box;
+      }
+
+      .tooltip[data-position="below"] img {
+        bottom: auto;
+        top: 100%;
+      }
+
+      .tooltip:hover img {
+        display: block;
+        /* Reposition if too close to top or bottom of viewport */
+        top: auto;
+        bottom: auto;
+      }
+
+      .blurred {
+        filter: blur(3px);
+        transition: filter 0.3s ease;
+      }
+
+      table td:not(:first-child),
+      table td li {
+        cursor: pointer;
+      }
+
+      summary {
+        font-size: 22px;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 16px 0;
+      }
+
+      details {
+        border: 2px solid #444;
+        border-radius: 8px;
+        padding: 10px;
+        background: #f9f9f9;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Protected Content</h2>
+    <p>Please enter the password to view the content:</p>
+    <input type="password" id="password" placeholder="Enter password" />
+    <button onclick="checkPassword()">Submit</button>
+    <div id="content" style="display: none; margin-top: 20px">
+      <!-- <div> -->
+      <div class="blur-buttons">
+        <button id="blurAll">Blur All (Press spacebar to blur)</button>
+        <button id="unblurAll">Unblur All (Press spacebar to unblue)</button>
+        <button
+          id="shuffleAllTables"
+          title="Shuffle each table's rows within its own details block"
+        >
+          Shuffle Tables (Press z to shuffle)
+        </button>
+        <button
+          id="resetTables"
+          title="Reset all tables to their original order"
+        >
+          Reset Tables (Press X to unshuffle)
+        </button>
+        <button id="toggleDetails">Expand/Collapse All (Press E)</button>
+        <button
+          id="darkModeToggle"
+          style="
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 9999;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+          "
+        >
+          Dark mode
+        </button>
+      </div>
+      <br />
+      <summary>
+        <details>Lecture 8: Oral Path and Anomalies</details>
+        <table>
+          <thead>
+            <tr>
+              <th>Abnormality</th>
+              <th>Category</th>
+              <th>Key Features / Description</th>
+              <th>Management / Treatment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Bohn's Nodules</td>
+              <td>Oral Pathology (Soft Tissue, Infancy)</td>
+              <td>
+                <ul>
+                  <li>White to yellow-white nodules ~1–3 mm, clustered</li>
+                  <li>Located on buccal and lingual alveolar ridge</li>
+                  <li>Trapped salivary gland remnants</li>
+                  <li>Occurs in 55–85% of neonates</li>
+                </ul>
+              </td>
+              <td>No treatment; self-resolves by rupturing or resorption</td>
+            </tr>
+            <tr>
+              <td>Epstein's Pearls</td>
+              <td>Oral Pathology (Soft Tissue, Infancy)</td>
+              <td>
+                <ul>
+                  <li>White to yellow-white nodules ~1–3 mm, clustered</li>
+                  <li>Located on midline of palate</li>
+                  <li>Trapped epithelial remnants</li>
+                  <li>Occurs in 55–85% of neonates</li>
+                </ul>
+              </td>
+              <td>No treatment; self-resolves by rupturing or resorption</td>
+            </tr>
+            <tr>
+              <td>Dental Lamina Cysts</td>
+              <td>Oral Pathology (Soft Tissue, Infancy)</td>
+              <td>
+                <ul>
+                  <li>
+                    Collective term for Bohn's Nodules and Epstein's Pearls
+                  </li>
+                  <li>Similar appearance, histology and treatment</li>
+                  <li>Slight differences in location and origin</li>
+                </ul>
+              </td>
+              <td>No treatment; self-resolves</td>
+            </tr>
+            <tr>
+              <td>Congenital Epulis</td>
+              <td>Oral Pathology (Soft Tissue, Infancy)</td>
+              <td>
+                <ul>
+                  <li>Pink to red polypoid mass, typically ~2 mm</li>
+                  <li>Maxillary alveolar ridge (rarely tongue)</li>
+                  <li>Suspected neural mesenchymal growth</li>
+                  <li>Rare (&gt;1%), more common in females</li>
+                </ul>
+              </td>
+              <td>
+                Surgical excision (may interfere with feeding and breathing)
+              </td>
+            </tr>
+            <tr>
+              <td>Riga Fede</td>
+              <td>Oral Pathology (Soft Tissue, Infancy)</td>
+              <td>
+                <ul>
+                  <li>Ulceration with fibrinopurulent membrane</li>
+                  <li>Ventral tongue (small % dorsal)</li>
+                  <li>Trauma from erupting teeth</li>
+                  <li>Age 1 week–1 year</li>
+                  <li>1 in 2000–3500</li>
+                </ul>
+              </td>
+              <td>Remove irritant by smoothing or removal; rapid healing</td>
+            </tr>
+            <tr>
+              <td>Melanotic Neuroectodermal Tumor of Infancy</td>
+              <td>Oral Pathology (Soft Tissue, Infancy)</td>
+              <td>
+                <ul>
+                  <li>
+                    Pigmented neoplasm; rapidly growing, expansile but benign
+                  </li>
+                  <li>Maxilla 62%, skull 16%, mandible 8%</li>
+                  <li>From neural crest cells</li>
+                  <li>Presents in first year of life</li>
+                  <li>Extremely rare (&lt;0.1%)</li>
+                </ul>
+              </td>
+              <td>Surgical excision required; possible recurrence</td>
+            </tr>
+            <tr>
+              <td>Eruption Cyst / Hematoma</td>
+              <td>Oral Pathology (Soft Tissue, Infancy)</td>
+              <td>
+                <ul>
+                  <li>
+                    Soft, translucent blue-gray swelling over an erupting tooth
+                    (darker if traumatized)
+                  </li>
+                  <li>Dental follicle fills with fluid</li>
+                  <li>During eruption (primary and permanent)</li>
+                  <li>
+                    More common in maxilla, central incisors, permanent first
+                    molars
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Often self-resolves</li>
+                  <li>
+                    Surgical opening if lesion persists to facilitate eruption
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Natal / Neonatal Teeth</td>
+              <td>Anomaly of Number</td>
+              <td>
+                <ul>
+                  <li>
+                    Natal = tooth present at birth; Neonatal = present within 30
+                    days
+                  </li>
+                  <li>85% mandibular</li>
+                  <li>90% normal primary incisor, 10% supernumerary</li>
+                  <li>Can impede nursing, cause Riga Fede, aspiration risk</li>
+                </ul>
+              </td>
+              <td>Smooth rough edges, monitor, or extract</td>
+            </tr>
+            <tr>
+              <td>Fusion</td>
+              <td>Anomaly of Number</td>
+              <td>
+                <ul>
+                  <li>Developing tooth buds join with hard tissue union</li>
+                  <li>
+                    Larger-than-expected tooth with two distinct pulp chambers
+                  </li>
+                  <li>One less tooth in the arch</li>
+                  <li>
+                    Plaque-retentive, caries-prone, can impede
+                    exfoliation/eruption
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Restoration/seal fusion line</li>
+                  <li>Extraction of primary fusions</li>
+                  <li>Esthetic restoration of permanent fusions</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Gemination</td>
+              <td>Anomaly of Number</td>
+              <td>
+                <ul>
+                  <li>Single tooth bud partially divides</li>
+                  <li>Split crowns with single root/canal</li>
+                  <li>Larger crown but normal tooth count</li>
+                  <li>Plaque-retentive and can cause crowding</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Restoration/seal</li>
+                  <li>Extraction</li>
+                  <li>Esthetic restoration of permanent teeth</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Supernumerary Teeth</td>
+              <td>Anomaly of Number</td>
+              <td>
+                <ul>
+                  <li>Complete extra tooth</li>
+                  <li>
+                    Prevalence 0.1–3.8%; more common in permanent dentition
+                  </li>
+                  <li>Most often a single extra (~75%)</li>
+                  <li>Maxillary incisors most common</li>
+                  <li>Mesiodens = supernumerary at maxillary midline</li>
+                  <li>
+                    Can prevent eruption, cause resorption, increase crowding
+                  </li>
+                </ul>
+              </td>
+              <td>Monitor, removal, orthodontic treatment</td>
+            </tr>
+            <tr>
+              <td>Dens Evaginatus</td>
+              <td>Abnormality of Shape</td>
+              <td>
+                <ul>
+                  <li>
+                    Accessory cusp/tubercle forms, often with an associated pulp
+                    horn
+                  </li>
+                  <li>
+                    More common in permanent teeth, lateral incisors and
+                    mandibular second premolars
+                  </li>
+                  <li>
+                    Often an occlusal interference that wears quickly, leading
+                    to pulp necrosis without caries
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>
+                    Slowly grind tubercle, reinforce with composite, or remove
+                    with pulp cap
+                  </li>
+                  <li>Endodontic therapy if pulp involved</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Dens Invaginatus (Dens in dente)</td>
+              <td>Abnormality of Shape</td>
+              <td>
+                <ul>
+                  <li>
+                    Lingual pit overextends, creating a channel into the tooth
+                  </li>
+                  <li>
+                    More common in permanent teeth; permanent lateral most
+                    common
+                  </li>
+                  <li>Often bilateral</li>
+                  <li>
+                    Difficult-to-clean area; pit routes bacteria toward pulp
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Prophylactic filling/seal of the channel</li>
+                  <li>Endodontic therapy as needed</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Taurodontism</td>
+              <td>Abnormality of Shape</td>
+              <td>
+                <ul>
+                  <li>Long pulp chambers and shorter roots</li>
+                  <li>Most often permanent molars</li>
+                  <li>
+                    Caused by failure of Hertwig's epithelial root sheath to
+                    invaginate
+                  </li>
+                  <li>
+                    Large pulps complicate endodontics; root form complicates
+                    periodontal therapy
+                  </li>
+                </ul>
+              </td>
+              <td>Maintain vitality</td>
+            </tr>
+            <tr>
+              <td>Amelogenesis Imperfecta (Types I–IV)</td>
+              <td>Congenital Anomaly</td>
+              <td>
+                <ul>
+                  <li>Group of hereditary disorders of defective enamel</li>
+                  <li>Type I hypoplastic: less enamel, normal quality</li>
+                  <li>
+                    Type II hypomaturation: normal amount, immature and chips
+                    easily
+                  </li>
+                  <li>
+                    Type III hypocalcification: normal shape, minimal mineral,
+                    very soft, yellow/orange to brown/black
+                  </li>
+                  <li>Type IV hypoplastic + taurodontism</li>
+                  <li>
+                    Teeth develop caries easily; sensitive from exposed dentin
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Full coverage restorations preferred</li>
+                  <li>
+                    Manage comorbidities (ortho for open bites, endo for pulp,
+                    prosthodontic rehab for lost vertical dimension)
+                  </li>
+                  <li>Maintain dentition</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Dentinogenesis Imperfecta / Dysplasia</td>
+              <td>Congenital Anomaly</td>
+              <td>
+                <ul>
+                  <li>
+                    Hereditary disorders of dentin formation/quality affecting
+                    both dentitions (primary more affected)
+                  </li>
+                  <li>DI Type I associated with osteogenesis imperfecta</li>
+                  <li>DI Type II pulpal obliteration</li>
+                  <li>DI Type III shell teeth (pulp enlargement)</li>
+                  <li>Dentin Dysplasia I rootless teeth</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>
+                    Prophylactic full coverage restorations in primary dentition
+                  </li>
+                  <li>Pulp therapy often required but difficult</li>
+                  <li>Extractions and prosthetics</li>
+                  <li>Maintain space</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Hypophosphatasia</td>
+              <td>Congenital Anomaly</td>
+              <td>
+                <ul>
+                  <li>Inherited deficiency of tissue alkaline phosphatase</li>
+                  <li>Defects of mineralized tissue; cementum most affected</li>
+                  <li>
+                    Cementum defects lead to early loss of primary teeth and
+                    possible inappropriate permanent tooth loss without root
+                    resorption
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Maintain space in primary dentition</li>
+                  <li>Esthetic replacement of lost incisors</li>
+                  <li>Assess permanent roots</li>
+                  <li>Prosthetic replacement as appropriate</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Drug Staining</td>
+              <td>Acquired Color Defect</td>
+              <td>
+                <ul>
+                  <li>
+                    Medications with strong pigmentation incorporated into
+                    developing dental tissues
+                  </li>
+                  <li>
+                    Color typically banded and follows chronology of tooth
+                    development
+                  </li>
+                  <li>Hard tissues otherwise normal</li>
+                </ul>
+              </td>
+              <td>Cosmetic/esthetic considerations (hard tissues normal)</td>
+            </tr>
+            <tr>
+              <td>Hyperbilirubinemia</td>
+              <td>Acquired Color Defect</td>
+              <td>
+                <ul>
+                  <li>
+                    Excess bilirubin (before and after birth) incorporated into
+                    dental hard tissues
+                  </li>
+                  <li>Causes green-blue discoloration</li>
+                </ul>
+              </td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Porphyria</td>
+              <td>Acquired Color Defect</td>
+              <td>
+                <ul>
+                  <li>Hereditary defective porphyrin metabolism</li>
+                  <li>Excess porphyrin deposited into dentition</li>
+                  <li>Teeth red-brown with UV fluorescence</li>
+                  <li>Usually more pronounced in primary teeth</li>
+                </ul>
+              </td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Congenital Syphilis</td>
+              <td>Acquired Structure Defect</td>
+              <td>
+                <ul>
+                  <li>Impacts tooth development</li>
+                  <li>
+                    Hutchinson incisors: narrow, tapered incisors with
+                    hypoplastic notch
+                  </li>
+                  <li>
+                    Mulberry molars: tapered molars with constricted occlusal
+                    table and atypical globular anatomy
+                  </li>
+                  <li>Anomalies persist even after infection treated</li>
+                </ul>
+              </td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Rickets</td>
+              <td>Acquired Structure Defect</td>
+              <td>
+                <ul>
+                  <li>Vitamin D deficiency (rare in developed countries)</li>
+                  <li>
+                    May cause hypoplasia in teeth developing during the time of
+                    deficiency
+                  </li>
+                </ul>
+              </td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Vitamin D Resistant Rickets</td>
+              <td>Acquired Structure Defect</td>
+              <td>
+                <ul>
+                  <li>
+                    Hereditary condition with rickets symptoms despite adequate
+                    Vitamin D
+                  </li>
+                  <li>
+                    Tooth hypoplasia and more notable structural anomalies
+                  </li>
+                  <li>Large pulp chambers with elongated pulp horns</li>
+                  <li>Frequent pulp necrosis and abscess</li>
+                </ul>
+              </td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Turner Hypoplasia</td>
+              <td>Acquired Structure Defect</td>
+              <td>
+                <ul>
+                  <li>
+                    Necrotic primary teeth provide a pathway for bacterial
+                    infections to reach developing permanent teeth
+                  </li>
+                  <li>
+                    Developing teeth subjected to bacterial byproducts develop
+                    irregularly
+                  </li>
+                </ul>
+              </td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Molar Incisor Hypomineralization (MIH)</td>
+              <td>Acquired Structure Defect</td>
+              <td>
+                <ul>
+                  <li>
+                    Disruptions around birth cause hypomineralization on first
+                    permanent molars and incisors
+                  </li>
+                  <li>All other teeth normal</li>
+                  <li>Pattern rarely linear; severity varies tooth to tooth</li>
+                  <li>Teeth sensitive and caries-prone</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Monitoring</li>
+                  <li>Fluoride varnish and sealants</li>
+                  <li>Restorations</li>
+                  <li>Early full coverage crowns</li>
+                  <li>Extraction and second molar substitution</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Molar Root Incisor Malformation (MRIM)</td>
+              <td>Acquired Structure Defect</td>
+              <td>
+                <ul>
+                  <li>
+                    Serious medical issues in the first 2 years of life can
+                    impact the roots of permanent first molars, incisors, and
+                    sometimes primary second molars
+                  </li>
+                  <li>Teeth prone to spontaneous necrosis</li>
+                  <li>Extremely difficult to treat endodontically</li>
+                </ul>
+              </td>
+              <td>Extraction and second molar substitution</td>
+            </tr>
+            <tr>
+              <td>Fluorosis</td>
+              <td>Acquired Structure Defect</td>
+              <td>
+                <ul>
+                  <li>
+                    Excess fluoride during development leads to irregular enamel
+                    crystal deposition
+                  </li>
+                  <li>Enamel from opaque white to mottled brown</li>
+                  <li>Primary dentition often unaffected</li>
+                  <li>
+                    Resistant to decalcification but surface irregularities
+                    collect plaque
+                  </li>
+                  <li>Unesthetic</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Monitoring for minor cases</li>
+                  <li>Esthetic restoration</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </summary>
+    </div>
+    <style>
+      /* same as before */
+      .blurred {
+        filter: blur(10px);
+        transition: filter 0.3s ease;
+      }
+
+      /* Make clickable cursor for td */
+      table td:not(:first-child) {
+        cursor: pointer;
+      }
+
+      /* li inside blurred td will inherit blur from parent */
+      table td.blurred li {
+        filter: inherit;
+      }
+
+      .blur-buttons {
+        text-align: center;
+        margin-bottom: 16px;
+      }
+      .blur-buttons button {
+        margin: 0 5px;
+        padding: 5px 12px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .blur-section li {
+        cursor: pointer;
+        margin-bottom: 6px;
+      }
+
+      /* Blur effect same as td */
+      .blur-section li.blurred {
+        filter: blur(10px);
+        transition: filter 0.3s ease;
+      }
+
+      /* Override for bold text so it always stays clear */
+      .blur-section li.blurred b {
+        filter: none !important;
+      }
+
+      .blur-section .blur-target {
+        cursor: pointer;
+        display: inline-block;
+      }
+
+      .blurred {
+        filter: blur(10px);
+        transition: filter 0.3s ease;
+      }
+
+      body.dark {
+        background: #0f1115;
+        color: #e8eaf0;
+      }
+      body.dark table > thead > tr > th,
+      body.dark table > tbody > tr > td {
+        color: #e8eaf0;
+      }
+      body.dark table > thead > tr > th {
+        border-bottom: 1px solid #3a3f4a;
+      }
+      body.dark table > tbody > tr + tr > td {
+        border-top: 1px solid #3a3f4a;
+      }
+      body.dark details {
+        background: #151922;
+        border-color: #5a616f;
+      }
+      body.dark .blur-buttons button {
+        background: #1b2230;
+        border: 1px solid #3a4252;
+        color: #e8eaf0;
+      }
+      body.dark input {
+        background: #151922;
+        color: #e8eaf0;
+        border-color: #3a4252;
+      }
+      body.dark button {
+        background: #1b2230;
+        border: 1px solid #3a4252;
+        color: #e8eaf0;
+      }
+    </style>
+    <script>
+      // === BLUR LOGIC (delegated for reliability after resets) ===
+      document.addEventListener("DOMContentLoaded", () => {
+        // Delegated click: blur targets
+        document.addEventListener("click", (e) => {
+          const target = e.target;
+          // Blur targets: any table td except first-child, or elements with class 'blur-target'
+          const blurTarget =
+            target.closest("td:not(:first-child)") ||
+            target.closest(".blur-target");
+          if (blurTarget) {
+            blurTarget.classList.toggle("blurred");
+          }
+        });
+
+        // Space toggles all blurables
+        document.addEventListener("keydown", (event) => {
+          if (event.code === "Space") {
+            const blurCells = document.querySelectorAll(
+              "table td:not(:first-child), .blur-section .blur-target",
+            );
+            const allBlurred = Array.from(blurCells).every((cell) =>
+              cell.classList.contains("blurred"),
+            );
+            blurCells.forEach((cell) => {
+              if (allBlurred) cell.classList.remove("blurred");
+              else cell.classList.add("blurred");
+            });
+            event.preventDefault();
+          }
+        });
+
+        // Buttons (if present)
+        const blurAllBtn = document.getElementById("blurAll");
+        const unblurAllBtn = document.getElementById("unblurAll");
+        if (blurAllBtn) {
+          blurAllBtn.addEventListener("click", () => {
+            document
+              .querySelectorAll(
+                "table td:not(:first-child), .blur-section .blur-target",
+              )
+              .forEach((el) => el.classList.add("blurred"));
+          });
+        }
+        if (unblurAllBtn) {
+          unblurAllBtn.addEventListener("click", () => {
+            document
+              .querySelectorAll(
+                "table td:not(:first-child), .blur-section .blur-target",
+              )
+              .forEach((el) => el.classList.remove("blurred"));
+          });
+        }
+      });
+
+      // === CUSTOM HEADER ELEMENT (unchanged) ===
+      class MyHeader extends HTMLElement {
+        connectedCallback() {
+          const text = this.innerHTML.trim() || "Section Title";
+
+          this.innerHTML = `
+        <div
+          style="
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            --tooltip-img-width: 400px;
+          "
+        >
+          ${text}
+        </div>
+        <br />
+      `;
+        }
+      }
+      customElements.define("my-header", MyHeader);
+
+      // === PASSWORD CHECK (unchanged) ===
+      function checkPassword() {
+        const enteredPassword = document.getElementById("password").value;
+        const correctPassword = "";
+        if (enteredPassword === correctPassword) {
+          document.getElementById("content").style.display = "block";
+          document.querySelector("h2").style.display = "none";
+          document.querySelector("p").style.display = "none";
+          document.getElementById("password").style.display = "none";
+          event.target.style.display = "none";
+        } else {
+          alert("Incorrect password. Please try again.");
+        }
+      }
+
+      // === SHUFFLE LOGIC (per-table inside details blocks) ===
+      function shuffleRowsInTable(table) {
+        const tbody = table.querySelector("tbody");
+        if (!tbody) return;
+
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+        if (rows.length <= 1) return;
+
+        // Detach all rows
+        rows.forEach((row) => tbody.removeChild(row));
+
+        // Fisher-Yates shuffle
+        for (let i = rows.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [rows[i], rows[j]] = [rows[j], rows[i]];
+        }
+
+        // Re-attach in new order
+        for (const row of rows) tbody.appendChild(row);
+      }
+
+      /* Capture the original order of rows for all tables inside details blocks (on page load) */
+      function captureOriginalOrder() {
+        const data = new Map();
+        document.querySelectorAll("details table").forEach((tbl) => {
+          const tbody = tbl.querySelector("tbody");
+          if (!tbody) return;
+          const order = Array.from(tbody.querySelectorAll("tr")).map((tr) =>
+            tr.cloneNode(true),
+          );
+          data.set(tbl, order);
+        });
+        return data;
+      }
+
+      /* Restore original order for all tables inside details blocks */
+      function resetTablesToOriginal(orderMap) {
+        orderMap.forEach((originalRows, tbl) => {
+          const tbody = tbl.querySelector("tbody");
+          if (!tbody) return;
+          // Remove current rows
+          const current = Array.from(tbody.querySelectorAll("tr"));
+          current.forEach((row) => tbody.removeChild(row));
+
+          // Append copies in original order
+          originalRows.forEach((row) => tbody.appendChild(row.cloneNode(true)));
+        });
+      }
+
+      /* Shuffle every table inside every details block independently */
+      function shuffleAllTablesInDetails() {
+        const detailsBlocks = document.querySelectorAll("details");
+        detailsBlocks.forEach((det) => {
+          det.querySelectorAll("table").forEach((tbl) => {
+            shuffleRowsInTable(tbl);
+          });
+        });
+      }
+
+      /* Wire up UI and keyboard shortcuts (Z to shuffle, X to reset) */
+      document.addEventListener("DOMContentLoaded", () => {
+        // Prepare original order snapshot
+        const originalOrder = captureOriginalOrder();
+
+        // Button handlers
+        const btnShuffle = document.getElementById("shuffleAllTables");
+        if (btnShuffle) {
+          btnShuffle.addEventListener("click", () => {
+            shuffleAllTablesInDetails();
+          });
+        }
+
+        const btnReset = document.getElementById("resetTables");
+        if (btnReset) {
+          btnReset.addEventListener("click", () => {
+            resetTablesToOriginal(originalOrder);
+          });
+        }
+
+        const btnToggleDetails = document.getElementById("toggleDetails");
+
+        if (btnToggleDetails) {
+          btnToggleDetails.addEventListener("click", () => {
+            const detailsBlocks = Array.from(
+              document.querySelectorAll("details"),
+            );
+            const allOpen = detailsBlocks.every((details) => details.open);
+
+            detailsBlocks.forEach((details) => {
+              details.open = !allOpen;
+            });
+          });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener("keydown", (event) => {
+          const key = event.key.toLowerCase();
+          if (key === "z") {
+            shuffleAllTablesInDetails();
+            event.preventDefault();
+          } else if (key === "x") {
+            resetTablesToOriginal(originalOrder);
+            event.preventDefault();
+          } else if (key === "e") {
+            const detailsBlocks = Array.from(
+              document.querySelectorAll("details"),
+            );
+            const allOpen = detailsBlocks.every((details) => details.open);
+
+            detailsBlocks.forEach((details) => {
+              details.open = !allOpen;
+            });
+
+            event.preventDefault();
+          }
+        });
+      });
+      (function () {
+        const toggle = document.getElementById("darkModeToggle");
+        if (!toggle) return;
+
+        // Load saved preference
+        const saved = localStorage.getItem("darkMode");
+        if (saved === "true") document.body.classList.add("dark");
+
+        function updateLabel() {
+          toggle.textContent = document.body.classList.contains("dark")
+            ? "Light mode"
+            : "Dark mode";
+        }
+        updateLabel();
+
+        toggle.addEventListener("click", () => {
+          document.body.classList.toggle("dark");
+          const isDark = document.body.classList.contains("dark");
+          localStorage.setItem("darkMode", String(isDark));
+          updateLabel();
+        });
+      })();
+    </script>
+  </body>
+</html>
